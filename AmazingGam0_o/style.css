@@ -1,0 +1,12 @@
+* {
+    padding: 0;
+    margin: 0;
+    background-color: black;
+    color: white;
+}
+
+canvas {
+    background-color: red;
+    display: block;
+    margin: 0 auto;
+}
