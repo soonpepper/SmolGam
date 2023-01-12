@@ -1,0 +1,39 @@
+Welcome to my game! 
+
+If you've reached this text file, that means that you're smarter
+than you give yourself credit for-
+
+Use the arrow keys to move, press Z to jump.
+
+Since you're here, might as well give you a clue into what you're
+supposed to do.
+
+Think outside the box.
+
+~~~
+
+> Not for the player to read past this point <
+If the user clicks outside the box, then a word starts to appear
+the more they click on the squares, the more of the word 
+appears
+
+Which is Memento Mori.
+
+Once this word is revealed, a pixel art of the depression game 
+pops up.
+
+In which, the player can smoke a cigarette and go through
+the visual novel.
+
+There is a pain meter, and once the pain level reaches the max
+there's a game over screen, the user can never play the game again
+
+This goes through my psychosis. 
+First I'll write the events that happens, and input it into the book
+Second I'll translate this into the game events-
+After that I'll add more things to it, like a sex button in relation
+to my relationship with Fania. 
+
+I'll add more as I think of them.
+
+-Timmy Turner

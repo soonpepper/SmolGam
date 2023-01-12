@@ -5,109 +5,112 @@ function hi(){
 var canvas = document.getElementById("canva");
 var ctx = canvas.getContext("2d");
 
-var ballRadius = 10;
+
 var x = canvas.width/2;
 var y = canvas.height-30;
+
 var dx = 2;
 var dy = -2;
-var paddleHeight = 30;
-var paddleWidth = 30;
-var paddleX = (canvas.width-paddleWidth)/2;
-var paddleY = (canvas.height-paddleHeight)/2;
-var rightPressed = false;
-var leftPressed = false;
-var upPressed = false;
-var downPressed = false; 
+var paddle = {
+    Height: 30,
+    Width: 30,
+    X: 200,
+    Y: 330,
+    px_v: 0,
+    py_v: 0,
+    jump: true
+};
 
 
+document.addEventListener("keydown",keydown);
+document.addEventListener("keyup",keyup);
 
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
+var keys = {
+    right: false,
+    left: false,
+    up: false,
+    };
 
-function keyDownHandler(e) {
-    if(e.key == "Right" || e.key == "ArrowRight") {
-        rightPressed = true;
-    }
-    else if(e.key == "Left" || e.key == "ArrowLeft") {
-        leftPressed = true;
-    }
-    else if(e.key == "Up" || e.key == "ArrowUp") {
-        upPressed = true;
-    }
-    else if(e.key == "Down" || e.key == "ArrowDown") {
-        downPressed = true;
-    }
-}
-
-
-function keyUpHandler(e) {
-    if(e.key == "Right" || e.key == "ArrowRight") {
-        rightPressed = false;
-    }
-    else if(e.key == "Left" || e.key == "ArrowLeft") {
-        leftPressed = false;
-    } else if (e.key == "Up" || e.key == "ArrowUp") {
-        upPressed = false;
-    } else if (e.key == "Down" || e.key == "ArrowDown") {
-        downPressed = false;
-    }
-}
-
-function drawBall() {
-    ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "blue";
-    ctx.fill();
-    ctx.closePath();
-}
 
 function drawPaddle() {
-    ctx.beginPath();
-    ctx.rect(paddleX, paddleY, paddleWidth, paddleHeight);
     ctx.fillStyle = "blue";
-    ctx.fill();
-    ctx.closePath();
+    ctx.fillRect((paddle.X)-20, (paddle.Y)-20, paddle.Width, paddle.Height);
+        
 }
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //drawBall();
+
+    if(paddle.X + paddle.px_v > canvas.width-paddle.Width || paddle.X + paddle.px_v < paddle.Width) {
+        paddle.px_v  = -paddle.px_v;
+    }
+    if(paddle.Y + paddle.py_v > canvas.height-paddle.Height|| paddle.Y + paddle.py_v < paddle.Height) {
+        paddle.py_v = -paddle.py_v;
+    }
+
+    if(paddle.jump == false) {
+        paddle.px_v *= friction;
+    } else {
+        // If the player is in the air then apply the effect of gravity
+        paddle.py_v += gravity;
+    }
+    paddle.jump = true;
+    // If the left key is pressed increase the relevant horizontal velocity
+    if(keys.left) {
+        paddle.X -= 5
+    }
+    if(keys.right) {
+        paddle.X += 5
+    }
+    if(keys.up) {
+        paddle.Y -= 5
+    }
+    
+    paddle.Y += paddle.py_v;
+    paddle.X += paddle.px_v;
+
     drawPaddle();
-    
-    if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
-        dx = -dx;
-    }
-    if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
-        dy = -dy;
-    }
-    
-    if(rightPressed) {
-        paddleX += 7;
-        if (paddleX + paddleWidth > canvas.width){
-            paddleX = canvas.width - paddleWidth;
-        }
-    }
-    else if(leftPressed) {
-        paddleX -= 7;
-        if (paddleX < 0){
-            paddleX = 0;
-        }
-    }
-    else if(upPressed) {
-        paddleY -= 7;
-        if (paddleY < 0){
-            paddleY = 0;
-        }
-    }
-    else if(downPressed) {
-        paddleY += 7;
-        if (paddleY + paddleHeight > canvas.height){
-            paddleY = canvas.height - paddleHeight;
-        }
-    }
-    
-    x += dx;
-    y += dy;
 }
 
-setInterval(draw, 0.001);
+
+// The friction and gravity to show realistic movements    
+var gravity = 0.5;
+var friction = 0.001;
+
+
+// This function will be called when a key on the keyboard is pressed
+function keydown(e) {
+    // 37 is the code for the left arrow key
+    if(e.keyCode == 37) {
+        keys.left = true;
+    }
+    // 37 is the code for the up arrow key
+    if(e.keyCode == 38) {
+        keys.up = true;
+        if(paddle.jump == false) {
+            paddle.py_v = -10;
+        }
+    }
+    // 39 is the code for the right arrow key
+    if(e.keyCode == 39) {
+        keys.right = true;
+    }
+}
+// This function is called when the pressed key is released
+function keyup(e) {
+    if(e.keyCode == 37) {
+        keys.left = false;
+    }
+    if(e.keyCode == 38) {
+        keys.up = false;
+        if(paddle.py_v < -1) {
+        paddle.py_v = -1;
+        }
+    }
+    if(e.keyCode == 39) {
+        keys.right = false;
+    }
+} 
+
+
+setInterval(draw, 22);
